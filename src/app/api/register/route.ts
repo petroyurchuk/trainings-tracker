@@ -6,9 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, name, password } = body;
-    if (!email || !name || !password) {
-      return NextResponse.error();
-    }
+
     const isAlreadyExist = await prisma.user.findUnique({
       where: {
         email,
@@ -16,7 +14,10 @@ export async function POST(request: NextRequest) {
     });
 
     if (isAlreadyExist) {
-      return NextResponse.error();
+      return NextResponse.json(
+        { message: "User already exists" },
+        { status: 500 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -29,6 +30,10 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json(user);
   } catch (error) {
-    return NextResponse.error();
+    console.log("Error occurred while registering!: " + error);
+    return NextResponse.json(
+      { message: "Error occurred while registering!" },
+      { status: 500 }
+    );
   }
 }

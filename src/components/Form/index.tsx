@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { TLoginSchema, TRegisterSchema, registerSchema } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +11,7 @@ type TDataForm = TLoginSchema | TRegisterSchema;
 const Form: React.FC = () => {
   const [variant, setVariant] = React.useState<VariantType>("login");
   const [dataForm, setDataForm] = React.useState<TRegisterSchema>();
+  const [error, setError] = React.useState("");
   const {
     register,
     handleSubmit,
@@ -34,10 +35,12 @@ const Form: React.FC = () => {
 
   const registerHandler = async (data: TRegisterSchema) => {
     try {
+      setError("");
       await axios.post("/api/register", data);
       alert("User successfully created");
-    } catch (error) {
-      console.log("Register error", error);
+    } catch (error: any) {
+      if (error?.response.data.message) setError(error.response.data.message);
+      console.log("Register error on client side", error);
     }
   };
 
@@ -86,6 +89,11 @@ const Form: React.FC = () => {
             <p className="message-error">{errors.password.message}</p>
           )}
         </div>
+        {error && (
+          <p className="text-red-400 text-center text-sm tracking-wide">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
           className="bg-gradient-to-r from-red-700 to-purple-950 p-3 text-white rounded-xl transition-all duration-150 hover:from-red-600 hover:to-purple-800 text-lg font-semibold tracking-wider hover:tracking-widest uppercase"
