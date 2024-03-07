@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="bg-black min-h-screen grid place-items-center">
+    <main className="bg-black/20 min-h-screen grid place-items-center">
       <Form />
     </main>
   );

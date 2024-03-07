@@ -9,6 +9,15 @@ export async function POST(request: NextRequest) {
     if (!email || !name || !password) {
       return NextResponse.error();
     }
+    const isAlreadyExist = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (isAlreadyExist) {
+      return NextResponse.error();
+    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = await prisma.user.create({
