@@ -50,4 +50,6 @@ const authOptions: NextAuthOptions = {
   secret: process.env.NEXT_AUTH_SECRET,
 };
 
-export default NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
