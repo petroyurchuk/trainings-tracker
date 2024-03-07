@@ -36,10 +36,7 @@ const Form: React.FC = () => {
   const registerHandler = async (data: TRegisterSchema) => {
     try {
       setError("");
-      await axios.post(
-        "https://trainings-tracker.vercel.app/api/register",
-        data
-      );
+      await axios.post(`${process.env.NEXTAUTH_URL}/api/register`, data);
       alert("User successfully created");
     } catch (error: any) {
       if (error?.response.data.message) setError(error.response.data.message);
