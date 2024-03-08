@@ -12,5 +12,7 @@ export const registerSchema = z.object({
 
 export type TRegisterSchema = z.infer<typeof registerSchema>;
 
-export const loginSchema = registerSchema.omit({ name: true });
+export const loginSchema = registerSchema.merge(
+  z.object({ name: z.string().optional() })
+);
 export type TLoginSchema = z.infer<typeof loginSchema>;

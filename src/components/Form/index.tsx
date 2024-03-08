@@ -1,36 +1,62 @@
 "use client";
 import React from "react";
-import axios, { AxiosError } from "axios";
-import { TLoginSchema, TRegisterSchema, registerSchema } from "@/lib/types";
+import axios from "axios";
+import {
+  TLoginSchema,
+  TRegisterSchema,
+  loginSchema,
+  registerSchema,
+} from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 
-type VariantType = "register" | "login";
-type TDataForm = TLoginSchema | TRegisterSchema;
+type VariantType = "login" | "register";
 
 const Form: React.FC = () => {
   const [variant, setVariant] = React.useState<VariantType>("login");
-  const [dataForm, setDataForm] = React.useState<TRegisterSchema>();
+  const typeData =
+    variant === "login" ? ({} as TLoginSchema) : ({} as TRegisterSchema);
+  const resolverSchema = variant === "login" ? loginSchema : registerSchema;
+  const [dataForm, setDataForm] = React.useState<typeof typeData>();
   const [error, setError] = React.useState("");
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isLoading },
     reset,
-  } = useForm<TRegisterSchema>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<typeof typeData>({
+    resolver: zodResolver(resolverSchema),
   });
 
   const handleChangeVariant = () => {
     setVariant((prevVariant) =>
       prevVariant === "login" ? "register" : "login"
     );
+    setError("");
   };
 
-  const submitHandler = (data: TRegisterSchema) => {
+  const submitHandler = (data: typeof typeData) => {
     setDataForm(data);
-    registerHandler(data);
+    if (variant === "register") {
+      registerHandler(data as TRegisterSchema);
+    } else {
+      login(data as TLoginSchema);
+    }
     reset();
+  };
+
+  const login = async (data: TLoginSchema) => {
+    try {
+      await signIn("credentials", {
+        ...data,
+        redirect: true,
+        callbackUrl: "/home",
+      });
+    } catch (error) {
+      console.log("Login error: " + error);
+    }
   };
 
   const registerHandler = async (data: TRegisterSchema) => {
@@ -38,8 +64,12 @@ const Form: React.FC = () => {
       setError("");
       await axios.post(`/api/register`, data);
       alert("User successfully created");
+      login({
+        email: data.email,
+        password: data.password,
+      });
     } catch (error: any) {
-      if (error?.response.data.message) setError(error.response.data.message);
+      if (error.response.data.message) setError(error.response.data.message);
       console.log("Register error on client side", error);
     }
   };
@@ -96,7 +126,7 @@ const Form: React.FC = () => {
         )}
         <button
           type="submit"
-          className="bg-gradient-to-r from-red-700 to-purple-950 p-3 text-white rounded-xl transition-all duration-150 hover:from-red-600 hover:to-purple-800 text-lg font-semibold tracking-wider hover:tracking-widest uppercase"
+          className={`bg-gradient-to-r from-red-700 to-purple-950 p-3 text-white rounded-xl transition-all duration-150 hover:from-red-600 hover:to-purple-800 text-lg font-semibold tracking-wider hover:tracking-widest uppercase ${isLoading ? "opacity-50" : ""}`}
         >
           {variant}
         </button>

@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/utils/prismadb";
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -31,13 +31,37 @@ const authOptions: NextAuthOptions = {
           user.password
         );
         if (!isCorrectPassword) {
-          throw new Error("Invalid credentials");
+          throw new Error("Password isn't correct");
         }
 
         return user;
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, session, trigger }) {
+      if (trigger === "update" && session?.name) {
+        token.name = session.name;
+      }
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+        };
+      }
+      return token;
+    },
+    async session({ token, session, user }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          name: token.name,
+        },
+      };
+    },
+  },
   pages: {
     signIn: "/",
   },
