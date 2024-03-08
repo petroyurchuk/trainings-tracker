@@ -1,19 +1,22 @@
 "use client";
 import React from "react";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   TLoginSchema,
   TRegisterSchema,
   loginSchema,
   registerSchema,
 } from "@/lib/types";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import toast, { Toaster } from "react-hot-toast";
 
 type VariantType = "login" | "register";
 
 const Form: React.FC = () => {
+  const router = useRouter();
   const [variant, setVariant] = React.useState<VariantType>("login");
   const typeData =
     variant === "login" ? ({} as TLoginSchema) : ({} as TRegisterSchema);
@@ -49,11 +52,20 @@ const Form: React.FC = () => {
 
   const login = async (data: TLoginSchema) => {
     try {
-      await signIn("credentials", {
+      setError("");
+      toast.loading("Logging you in...");
+      const response = await signIn("credentials", {
         ...data,
-        redirect: true,
-        callbackUrl: "/home",
+        redirect: false,
+        callbackUrl: "/",
       });
+      if (response?.status === 401 && response.error) {
+        toast.error("Login failed...");
+        setError("Password isn't correct");
+        return;
+      }
+      toast.success("Login success");
+      router.push("/home");
     } catch (error) {
       console.log("Login error: " + error);
     }
@@ -62,8 +74,9 @@ const Form: React.FC = () => {
   const registerHandler = async (data: TRegisterSchema) => {
     try {
       setError("");
+      toast.loading("Registration...");
       await axios.post(`/api/register`, data);
-      alert("User successfully created");
+      toast.success("User successfully created");
       login({
         email: data.email,
         password: data.password,
@@ -130,6 +143,12 @@ const Form: React.FC = () => {
         >
           {variant}
         </button>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 3000,
+          }}
+        />
         <div className="text-right">
           {variant === "login"
             ? "Don't have an account?"
