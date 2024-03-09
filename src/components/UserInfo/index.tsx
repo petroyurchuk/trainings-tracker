@@ -23,7 +23,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
       <div className="capitalize">{user.name}</div>
       <div
         onClick={handleSignOut}
-        className="w-[100px] py-2 text-center rounded-md cursor-pointer bg-slate-900 transition-all duration-150 hover:bg-slate-800"
+        className="w-[100px] text-white py-2 text-center rounded-md cursor-pointer bg-slate-800 transition-all duration-150 hover:bg-slate-700"
       >
         Sign out
       </div>

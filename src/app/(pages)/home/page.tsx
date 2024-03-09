@@ -1,18 +1,10 @@
-import { authOptions } from "@/auth";
-import { UserInfo } from "@/components";
-import { getServerSession } from "next-auth";
+import { Navbar } from "@/components";
 
 type Props = {};
 const HomePage = async (props: Props) => {
-  const session = await getServerSession(authOptions);
   return (
-    <div className="min-h-[60px] bg-slate-600 text-white ">
-      <UserInfo
-        user={{
-          email: session?.user?.email,
-          name: session?.user?.name,
-        }}
-      />
+    <div className="min-h-[50px] h-[60px] bg-gradient-to-b from-cyan-900 to-cyan-950 text-white ">
+      <Navbar />
     </div>
   );
 };

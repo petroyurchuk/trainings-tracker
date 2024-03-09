@@ -82,13 +82,16 @@ const Form: React.FC = () => {
         password: data.password,
       });
     } catch (error: any) {
-      if (error.response.data.message) setError(error.response.data.message);
+      if (error.response.data.message) {
+        toast.error("Registration failed");
+        setError(error.response.data.message);
+      }
       console.log("Register error on client side", error);
     }
   };
 
   return (
-    <div className="w-[90%] bg-white/95 border-t-8 border-purple-950 min-h-[300px] md:max-w-[400px] rounded-xl p-3  shadow-lg shadow-slate-500 space-y-2">
+    <div className="w-[90%] bg-white/95 border-t-8 border-slate-950 min-h-[300px] md:max-w-[400px] rounded-xl p-3  shadow-xl shadow-slate-950 space-y-2">
       <h3 className="text-2xl font-bold w-full capitalize">{variant}</h3>
       <form
         className="space-y-5 w-full flex flex-col "
@@ -139,14 +142,14 @@ const Form: React.FC = () => {
         )}
         <button
           type="submit"
-          className={`bg-gradient-to-r from-red-700 to-purple-950 p-3 text-white rounded-xl transition-all duration-150 hover:from-red-600 hover:to-purple-800 text-lg font-semibold tracking-wider hover:tracking-widest uppercase ${isLoading ? "opacity-50" : ""}`}
+          className={`bg-gradient-to-r from-slate-900 to-slate-950 p-3 text-white rounded-xl transition-all duration-150 hover:from-slate-800 hover:to-slate-900 text-lg font-semibold tracking-wider hover:tracking-widest uppercase ${isLoading ? "opacity-50" : ""}`}
         >
           {variant}
         </button>
         <Toaster
           position="top-center"
           toastOptions={{
-            duration: 3000,
+            duration: 2000,
           }}
         />
         <div className="text-right">
