@@ -1,12 +1,13 @@
-import { BgProvider } from "@/components";
-import Form from "@/components/Form";
+import { HeroBanner, Navbar, SearchExercises } from "@/components";
 
-export default function Home() {
+type Props = {};
+const HomePage = async (props: Props) => {
   return (
-    <main className=" min-h-screen grid place-items-center">
-      <BgProvider>
-        <Form />
-      </BgProvider>
-    </main>
+    <div>
+      <Navbar />
+      <HeroBanner />
+      <SearchExercises />
+    </div>
   );
-}
+};
+export default HomePage;

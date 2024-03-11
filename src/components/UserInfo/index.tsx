@@ -15,7 +15,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
   if (!user) throw new Error("User isn't signed in");
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+    signOut({ callbackUrl: "/auth" });
   };
 
   return (

@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/",
+    signIn: "/auth",
   },
   session: {
     strategy: "jwt",

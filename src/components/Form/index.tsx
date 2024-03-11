@@ -14,8 +14,11 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 
 type VariantType = "login" | "register";
+type FormProps = {
+  isLogged: boolean;
+};
 
-const Form: React.FC = () => {
+const Form: React.FC<FormProps> = ({ isLogged }) => {
   const router = useRouter();
   const [variant, setVariant] = React.useState<VariantType>("login");
   const typeData =
@@ -57,7 +60,7 @@ const Form: React.FC = () => {
       const response = await signIn("credentials", {
         ...data,
         redirect: false,
-        callbackUrl: "/",
+        callbackUrl: "/auth",
       });
       if (response?.status === 401 && response.error) {
         toast.error("Login failed...");
@@ -65,7 +68,7 @@ const Form: React.FC = () => {
         return;
       }
       toast.success("Login success");
-      router.push("/home");
+      router.push("/");
     } catch (error) {
       console.log("Login error: " + error);
     }
@@ -89,7 +92,9 @@ const Form: React.FC = () => {
       console.log("Register error on client side", error);
     }
   };
-
+  if (isLogged) {
+    router.push("/");
+  }
   return (
     <div className="w-[90%] bg-white/90 border-t-8 border-slate-950 min-h-[300px] md:max-w-[400px] rounded-xl p-3  shadow-xl shadow-slate-950 space-y-2">
       <h3 className="text-2xl font-bold w-full capitalize">{variant}</h3>
