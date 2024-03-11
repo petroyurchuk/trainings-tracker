@@ -91,7 +91,7 @@ const Form: React.FC = () => {
   };
 
   return (
-    <div className="w-[90%] bg-white/95 border-t-8 border-slate-950 min-h-[300px] md:max-w-[400px] rounded-xl p-3  shadow-xl shadow-slate-950 space-y-2">
+    <div className="w-[90%] bg-white/90 border-t-8 border-slate-950 min-h-[300px] md:max-w-[400px] rounded-xl p-3  shadow-xl shadow-slate-950 space-y-2">
       <h3 className="text-2xl font-bold w-full capitalize">{variant}</h3>
       <form
         className="space-y-5 w-full flex flex-col "

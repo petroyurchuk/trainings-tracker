@@ -1,33 +1,45 @@
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { Stack } from "@mui/material";
 
 type NavbarProps = {};
 const Navbar: React.FC<NavbarProps> = () => {
   return (
-    <header className="max-w-[1200px] h-full m-auto flex">
-      <nav className="w-full h-full">
-        <ul className="w-full h-full flex justify-center items-center gap-5">
-          {["Exercises catalog", "Journal of trainings", "Community"].map(
-            (listItem, idx) => (
-              <li
-                className="uppercase tracking-wider transition-all duration-150 hover:underline font-semibold"
-                key={idx}
-              >
-                <Link href={`/${listItem.split(" ").join("")}`}>
-                  {listItem}
-                </Link>
-              </li>
-            )
-          )}
-        </ul>
-      </nav>
-      <Link
-        className="leading-[60px] uppercase tracking-widest font-semibold transition-all duration-150 hover:tracking-[3px]"
-        href={"/profile"}
-      >
-        Profile
+    <Stack
+      direction="row"
+      sx={{
+        gap: {
+          sm: "122px",
+          xs: "40px",
+        },
+        mt: {
+          sm: "32px",
+          xs: "20px",
+        },
+        px: "20px",
+      }}
+    >
+      <Link href={"/home"}>
+        <p className="size-[48px] my-0 mx-5">Logo Image</p>
       </Link>
-    </header>
+      <Stack direction="row" gap="40px" fontSize="24px" alignItems="flex-end">
+        <Link
+          className="decoration-0 text-[#3A1212] border-b-2 border-[#FF2625]"
+          href={"/home"}
+        >
+          Home
+        </Link>
+        <a href="#exercises" className="decoration-0 text-[#3A1212]">
+          Exercises
+        </a>
+        <Link
+          className="decoration-0 text-[#3A1212] border-b-2 border-[#FF2625]"
+          href={"/profile"}
+        >
+          Profile
+        </Link>
+      </Stack>
+    </Stack>
   );
 };
 export default Navbar;

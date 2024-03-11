@@ -1,15 +1,19 @@
 "use client";
 import React from "react";
 import { signOut } from "next-auth/react";
+import { Role } from "@prisma/client";
 
 type UserInfoProps = {
   user: {
     name: string | null | undefined;
     email: string | null | undefined;
     picture?: string;
+    role: Role;
   };
 };
 const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
+  if (!user) throw new Error("User isn't signed in");
+
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
   };
@@ -20,6 +24,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
         Email:
         {user.email}
       </div>
+      <div>Role: {user.role}</div>
       <div className="capitalize">{user.name}</div>
       <div
         onClick={handleSignOut}

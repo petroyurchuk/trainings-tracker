@@ -40,26 +40,43 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, session, trigger }) {
+      const dbUser = await prisma.user.findFirst({
+        where: {
+          email: token.email ?? undefined,
+        },
+      });
+
       if (trigger === "update" && session?.name) {
         token.name = session.name;
       }
-      if (user) {
+
+      if (user && !dbUser) {
         return {
           ...token,
           id: user.id,
         };
       }
-      return token;
-    },
-    async session({ token, session, user }) {
       return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          name: token.name,
-        },
+        id: dbUser?.id,
+        name: dbUser?.name,
+        email: dbUser?.email,
+        picture: dbUser?.image,
+        role: dbUser?.role,
       };
+    },
+    async session({ token, session }) {
+      if (token) {
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            id: token.id,
+            name: token.name,
+            role: token.role,
+          },
+        };
+      }
+      return session;
     },
   },
   pages: {
@@ -67,6 +84,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
+    maxAge: 24 * 60 * 60,
   },
   jwt: {
     secret: process.env.NEXT_AUTH_JWT_SECRET,
