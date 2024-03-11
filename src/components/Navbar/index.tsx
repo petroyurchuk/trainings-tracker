@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Stack } from "@mui/material";
+import Image from "next/image";
 
 type NavbarProps = {};
 const Navbar: React.FC<NavbarProps> = () => {
@@ -20,7 +21,13 @@ const Navbar: React.FC<NavbarProps> = () => {
       }}
     >
       <Link href={"/home"}>
-        <p className="size-[48px] my-0 mx-5">Logo Image</p>
+        <Image
+          width={48}
+          height={48}
+          src="/images/Logo.png"
+          alt="logo image"
+          className="my-0 mx-5"
+        />
       </Link>
       <Stack direction="row" gap="40px" fontSize="24px" alignItems="flex-end">
         <Link
