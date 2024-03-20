@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setBodyParts } from "@/store/exercise/slice";

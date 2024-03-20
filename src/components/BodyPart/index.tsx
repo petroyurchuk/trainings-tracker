@@ -21,7 +21,7 @@ const BodyPart: React.FC<BodyPartProps> = ({ item }) => {
         borderBottomLeftRadius: 20,
         height: 150,
         cursor: "pointer",
-        gap: 5,
+        gap: "47px",
       }}
       onClick={() => dispatch(setBodyPart(item))}
     >

@@ -1,4 +1,5 @@
 import { HeroBanner, Navbar, SearchExercises } from "@/components";
+import Exercises from "@/components/Exercises";
 
 const HomePage = async () => {
   return (
@@ -6,6 +7,7 @@ const HomePage = async () => {
       <Navbar />
       <HeroBanner />
       <SearchExercises />
+      <Exercises />
     </div>
   );
 };
