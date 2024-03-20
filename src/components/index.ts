@@ -4,3 +4,5 @@ export { default as Navbar } from "./Navbar";
 export { default as BgProvider } from "./BgProvider";
 export { default as HeroBanner } from "./HeroBanner";
 export { default as SearchExercises } from "./SearchExercises";
+export { default as HorizontalScrollBar } from "./HorizontalScrollBar";
+export { default as BodyPart } from "./BodyPart";

@@ -1,7 +1,6 @@
 import { HeroBanner, Navbar, SearchExercises } from "@/components";
 
-type Props = {};
-const HomePage = async (props: Props) => {
+const HomePage = async () => {
   return (
     <div>
       <Navbar />

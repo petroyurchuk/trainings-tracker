@@ -130,3 +130,8 @@
     width: 280px;
   }
 }
+
+.container {
+  width: 100%;
+  display: flex;
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import { StyledEngineProvider } from "@mui/material/styles";
+import { StoreProvider } from "@/providers/StoreProvider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,9 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <AppRouterCacheProvider>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
+      <StoreProvider>
+        <html lang="en">
+          <body className={inter.className}>{children}</body>
+        </html>
+      </StoreProvider>
     </AppRouterCacheProvider>
   );
 }

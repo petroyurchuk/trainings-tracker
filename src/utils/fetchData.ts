@@ -1,8 +1,7 @@
-import { Exercise } from "@/types/exercise";
 import axios from "axios";
 const options = {
   method: "GET",
-  params: { limit: "20" },
+  params: { limit: "100" },
   headers: {
     "X-RapidAPI-Key": `be0223e01dmsh7109def8e9a5700p1d343djsn2a532846d41a`,
     "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",

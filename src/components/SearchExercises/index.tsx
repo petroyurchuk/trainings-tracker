@@ -2,33 +2,38 @@
 
 import React from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setExercises } from "@/store/exercise/slice";
 import { fetchData } from "@/utils/fetchData";
 import { Exercise } from "@/types/exercise";
+import { HorizontalScrollBar } from "@/components";
 
 const SearchExercises: React.FC = () => {
   const [searchField, setSearchField] = React.useState("");
-  const [exercises, setExercises] = React.useState<Exercise[]>();
-  const [bodyParts, setBodyParts] = React.useState<string[]>();
 
+  const dispatch = useAppDispatch();
   React.useEffect(() => {
-    const fetchExercisesData = async () => {
-      const bodyPartsData = await fetchData<string>(
-        "https://exercisedb.p.rapidapi.com/exercises/bodyPartList"
-      );
-      if (!bodyPartsData) return;
-      setBodyParts(["all", ...bodyPartsData]);
+    const fetchingData = async () => {
+      if (!localStorage.getItem("exercises")) {
+        const data = await fetchData<Exercise>(
+          "https://exercisedb.p.rapidapi.com/exercises"
+        );
+        localStorage.setItem("exercises", JSON.stringify(data));
+        dispatch(setExercises(data!));
+        return;
+      }
+      const data = JSON.parse(localStorage.getItem("exercises")!);
+      dispatch(setExercises(data));
     };
-  }, []);
+    fetchingData();
+  }, [dispatch]);
+
+  const { exercises } = useAppSelector((state) => state.exercise);
 
   const handleSearch = async () => {
     if (searchField) {
       try {
-        const exercisesData = await fetchData<Exercise>(
-          "https://exercisedb.p.rapidapi.com/exercises"
-        );
-        if (!exercisesData)
-          throw new Error("Something went wrong while fetching data");
-        const searchedExercises = exercisesData.filter(
+        const searchedExercises = exercises.filter(
           (exercise) =>
             exercise.name.toLowerCase().includes(searchField) ||
             exercise.target.toLowerCase().includes(searchField) ||
@@ -36,8 +41,6 @@ const SearchExercises: React.FC = () => {
             exercise.bodyPart.toLowerCase().includes(searchField)
         );
         setSearchField("");
-        setExercises(searchedExercises);
-        console.log(exercisesData);
       } catch (error) {
         console.log("Error while fetching data in component: ", error);
       }
@@ -107,6 +110,7 @@ const SearchExercises: React.FC = () => {
           Search
         </Button>
       </Box>
+      <HorizontalScrollBar />
     </Stack>
   );
 };

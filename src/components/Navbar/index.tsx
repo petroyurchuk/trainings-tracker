@@ -20,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         px: "20px",
       }}
     >
-      <Link href={"/home"}>
+      <Link href={"/"}>
         <Image
           width={48}
           height={48}
@@ -30,12 +30,6 @@ const Navbar: React.FC<NavbarProps> = () => {
         />
       </Link>
       <Stack direction="row" gap="40px" fontSize="24px" alignItems="flex-end">
-        <Link
-          className="decoration-0 text-[#3A1212] border-b-2 border-[#FF2625]"
-          href={"/home"}
-        >
-          Home
-        </Link>
         <a href="#exercises" className="decoration-0 text-[#3A1212]">
           Exercises
         </a>
