@@ -9,10 +9,7 @@ type ExerciseCardProps = {
 };
 const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise }) => {
   return (
-    <Link
-      href={`/exercise/${exercise.id}`}
-      className="flex flex-col items-center"
-    >
+    <Link href={`/${exercise.id}`} className="flex flex-col items-center">
       <Image
         unoptimized
         width={250}

@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setBodyParts } from "@/store/exercise/slice";
-import { fetchData } from "@/utils/fetchData";
+import { fetchData, optionsExercise } from "@/utils/fetchData";
 import { BodyPart } from "@/components";
 import { BODY_PART_WIDTH } from "@/constants";
 
@@ -27,7 +27,8 @@ const HorizontalScrollBar: React.FC = () => {
     const fetchBodyParts = async () => {
       if (!localStorage.getItem("bodyParts")) {
         const data = await fetchData<string>(
-          "https://exercisedb.p.rapidapi.com/exercises/bodyPartList"
+          "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
+          optionsExercise
         );
         localStorage.setItem("bodyParts", JSON.stringify(data));
         dispatch(setBodyParts(data!));

@@ -2,11 +2,12 @@
 
 import React from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
 import { setExercises } from "@/store/exercise/slice";
-import { fetchData } from "@/utils/fetchData";
+import { fetchData, optionsExercise } from "@/utils/fetchData";
 import { Exercise } from "@/types/exercise";
 import { HorizontalScrollBar } from "@/components";
+import { EXERCISES_API_URL } from "@/constants";
 
 const SearchExercises: React.FC = () => {
   const [searchField, setSearchField] = React.useState("");
@@ -16,7 +17,8 @@ const SearchExercises: React.FC = () => {
     const fetchingData = async () => {
       if (!localStorage.getItem("exercises")) {
         const data = await fetchData<Exercise>(
-          "https://exercisedb.p.rapidapi.com/exercises"
+          EXERCISES_API_URL,
+          optionsExercise
         );
         localStorage.setItem("exercises", JSON.stringify(data));
         dispatch(setExercises(data!));
@@ -28,12 +30,13 @@ const SearchExercises: React.FC = () => {
     fetchingData();
   }, [dispatch]);
 
-  const { exercises } = useAppSelector((state) => state.exercise);
-
   const handleSearch = async () => {
+    const actualExercises: Exercise[] = JSON.parse(
+      localStorage.getItem("exercises")!
+    );
     if (searchField) {
       try {
-        const searchedExercises = exercises.filter(
+        const searchedExercises = actualExercises.filter(
           (exercise) =>
             exercise.name.toLowerCase().includes(searchField) ||
             exercise.target.toLowerCase().includes(searchField) ||

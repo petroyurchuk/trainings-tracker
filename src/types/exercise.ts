@@ -8,3 +8,8 @@ export type Exercise = {
   secondaryMuscles: string[];
   instructions: string[];
 };
+
+export type ExtraDetailT = {
+  id: string;
+  image: string;
+};
