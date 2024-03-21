@@ -1,5 +1,5 @@
 import { HeroBanner, Navbar, SearchExercises } from "@/components";
-import Exercises from "@/components/Exercises";
+import { Exercises } from "@/components";
 
 const HomePage = async () => {
   return (

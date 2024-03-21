@@ -20,6 +20,7 @@ const BodyPart: React.FC<BodyPartProps> = ({ item }) => {
         width: BODY_PART_WIDTH,
         borderBottomLeftRadius: 20,
         height: 150,
+        bgcolor: "#fff",
         cursor: "pointer",
         gap: "47px",
       }}

@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+body {
+  background-color: #fffafb;
+}
 
 .custom-input {
   @apply w-full p-2 shadow-lg outline-none placeholder:capitalize transition-all duration-150 placeholder:text-slate-400 focus:scale-105 focus:rounded-md;

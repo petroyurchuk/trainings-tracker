@@ -5,7 +5,7 @@ import { Exercise } from "@/types/exercise";
 const initialState: InitialStateExercise = {
   exercises: [],
   bodyParts: [],
-  bodyPart: "",
+  bodyPart: "all",
 };
 
 const exerciseSlice = createSlice({

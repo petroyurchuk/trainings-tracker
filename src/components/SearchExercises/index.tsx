@@ -40,6 +40,7 @@ const SearchExercises: React.FC = () => {
             exercise.equipment.toLowerCase().includes(searchField) ||
             exercise.bodyPart.toLowerCase().includes(searchField)
         );
+        dispatch(setExercises(searchedExercises));
         setSearchField("");
       } catch (error) {
         console.log("Error while fetching data in component: ", error);

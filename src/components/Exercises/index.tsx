@@ -1,14 +1,40 @@
 "use client";
 
 import React from "react";
-
 import { Pagination, Box, Stack, Typography } from "@mui/material";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setExercises } from "@/store/exercise/slice";
+import { ExerciseCard } from "@/components";
+import { EXERCISES_PER_PAGE } from "@/constants";
+import { Exercise } from "@/types/exercise";
 
 type ExercisesProps = {};
 const Exercises: React.FC<ExercisesProps> = () => {
-  const { exercises } = useAppSelector((state) => state.exercise);
+  const dispatch = useAppDispatch();
+  const { exercises, bodyPart } = useAppSelector((state) => state.exercise);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const indexOfLastExercise = currentPage * EXERCISES_PER_PAGE;
+  const indexOfFirstExercise = indexOfLastExercise - EXERCISES_PER_PAGE;
+  const currentExercises = exercises.slice(
+    indexOfFirstExercise,
+    indexOfLastExercise
+  );
 
+  React.useEffect(() => {
+    if (bodyPart === "all") return;
+    const actualExercises: Exercise[] = JSON.parse(
+      localStorage.getItem("exercises")!
+    );
+    const exercisesByBodyPart = actualExercises.filter(
+      (exercise) => exercise.bodyPart === bodyPart
+    );
+    dispatch(setExercises(exercisesByBodyPart));
+  }, [bodyPart]);
+
+  const paginate = (e: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+    window.scrollTo({ top: 1800, behavior: "smooth" });
+  };
   return (
     <Box
       id="exercises"
@@ -24,19 +50,37 @@ const Exercises: React.FC<ExercisesProps> = () => {
         Showing results
       </Typography>
       <Stack
-        direction="row"
         sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            lg: "repeat(3, 1fr)",
+            md: "repeat(2,1fr)",
+            sm: "repeat(1,1fr)",
+          },
+          justifyContent: "center",
+
           gap: {
             lg: "110px",
             xs: "50px",
           },
         }}
-        flexWrap="wrap"
-        justifyContent="center"
       >
-        {exercises.map((exercise) => (
-          <Box key={exercise.id}>{exercise.name}</Box>
+        {currentExercises.map((exercise) => (
+          <ExerciseCard key={exercise.id} exercise={exercise} />
         ))}
+      </Stack>
+      <Stack mt="100px" alignItems="center">
+        {exercises.length > 9 && (
+          <Pagination
+            color="standard"
+            shape="rounded"
+            defaultPage={1}
+            count={Math.ceil(exercises.length / EXERCISES_PER_PAGE)}
+            page={currentPage}
+            onChange={paginate}
+            size="large"
+          />
+        )}
       </Stack>
     </Box>
   );
