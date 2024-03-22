@@ -2,30 +2,23 @@
 
 import React from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { useAppDispatch } from "@/store/hooks";
-import { setExercises } from "@/store/exercise/slice";
-import { fetchData, optionsExercise } from "@/utils/fetchData";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setBodyParts, setExercises } from "@/store/exercise/slice";
+import { fetchBodyParts, fetchExercises } from "@/utils/fetchData";
 import { Exercise } from "@/types/exercise";
 import { HorizontalScrollBar } from "@/components";
-import { EXERCISES_API_URL } from "@/constants";
 
 const SearchExercises: React.FC = () => {
   const [searchField, setSearchField] = React.useState("");
+  const { bodyParts } = useAppSelector((state) => state.exercise);
 
   const dispatch = useAppDispatch();
   React.useEffect(() => {
     const fetchingData = async () => {
-      if (!localStorage.getItem("exercises")) {
-        const data = await fetchData<Exercise>(
-          EXERCISES_API_URL,
-          optionsExercise
-        );
-        localStorage.setItem("exercises", JSON.stringify(data));
-        dispatch(setExercises(data!));
-        return;
-      }
-      const data = JSON.parse(localStorage.getItem("exercises")!);
-      dispatch(setExercises(data));
+      const exercisesData = await fetchExercises();
+      const bodyPartsData = await fetchBodyParts();
+      dispatch(setExercises(exercisesData));
+      dispatch(setBodyParts(bodyPartsData));
     };
     fetchingData();
   }, [dispatch]);
@@ -114,7 +107,7 @@ const SearchExercises: React.FC = () => {
           Search
         </Button>
       </Box>
-      <HorizontalScrollBar />
+      <HorizontalScrollBar data={bodyParts} isBodyParts />
     </Stack>
   );
 };

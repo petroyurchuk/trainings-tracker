@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { VideoT } from "@/types/video";
 import Image from "next/image";
+import { Loader } from "..";
 
 type ExerciseVideosProps = {
   exerciseVideos: VideoT;
@@ -10,6 +11,7 @@ const ExerciseVideos: React.FC<ExerciseVideosProps> = ({
   exerciseVideos,
   name,
 }) => {
+  if (!exerciseVideos.contents?.length) return <Loader />;
   return (
     <Box
       sx={{
@@ -39,7 +41,7 @@ const ExerciseVideos: React.FC<ExerciseVideosProps> = ({
           },
         }}
       >
-        {exerciseVideos.contents.slice(0, 6).map(({ video }) => (
+        {exerciseVideos?.contents?.slice(0, 6).map(({ video }) => (
           <a
             key={video.videoId}
             href={`https://www.youtube.com/watch?v=${video.videoId}`}

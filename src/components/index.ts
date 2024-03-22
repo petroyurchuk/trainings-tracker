@@ -12,3 +12,5 @@ export { default as Button } from "./Button";
 export { default as ExerciseDetail } from "./ExerciseDetail";
 export { default as Detail } from "./Detail";
 export { default as ExerciseVideos } from "./ExerciseVideos";
+export { default as Loader } from "./Loader";
+export { default as SimilarExercises } from "./SimilarExercises";
