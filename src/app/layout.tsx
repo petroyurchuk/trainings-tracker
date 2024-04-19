@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { StoreProvider } from "@/providers/StoreProvider";
 import "./globals.css";
+import SessionProviderCustom from "@/providers/SessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +19,13 @@ export default function RootLayout({
 }>) {
   return (
     <AppRouterCacheProvider>
-      <StoreProvider>
-        <html lang="en">
-          <body className={inter.className}>{children}</body>
-        </html>
-      </StoreProvider>
+      <SessionProviderCustom>
+        <StoreProvider>
+          <html lang="en">
+            <body className={inter.className}>{children}</body>
+          </html>
+        </StoreProvider>
+      </SessionProviderCustom>
     </AppRouterCacheProvider>
   );
 }

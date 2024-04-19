@@ -1,10 +1,13 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Stack } from "@mui/material";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 
-type NavbarProps = {};
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar: React.FC = () => {
+  const { data } = useSession();
   return (
     <Stack
       direction="row"
@@ -33,12 +36,20 @@ const Navbar: React.FC<NavbarProps> = () => {
         <a href="#exercises" className="decoration-0 text-[#3A1212]">
           Exercises
         </a>
-        <Link
-          className="decoration-0 text-[#3A1212] border-b-2 border-[#FF2625]"
-          href={"/profile"}
-        >
-          Profile
-        </Link>
+        {!!data ? (
+          <>
+            <Link
+              className="decoration-0 text-[#3A1212] border-b-2 border-[#FF2625]"
+              href={"/profile"}
+            >
+              Profile
+            </Link>
+            <Link href={"/community"}>Community</Link>
+            <Link href={"/workouts"}>Workouts</Link>
+          </>
+        ) : (
+          <Link href={"/auth"}>Log In</Link>
+        )}
       </Stack>
     </Stack>
   );

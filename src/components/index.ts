@@ -14,3 +14,7 @@ export { default as Detail } from "./Detail";
 export { default as ExerciseVideos } from "./ExerciseVideos";
 export { default as Loader } from "./Loader";
 export { default as SimilarExercises } from "./SimilarExercises";
+export { default as CreateWorkout } from "./CreateWorkout";
+export { default as Workouts } from "./Workouts";
+export { default as WorkoutDetail } from "./WorkoutDetail";
+export { default as ExerciseForm } from "./ExerciseForm";

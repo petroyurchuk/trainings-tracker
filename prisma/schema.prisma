@@ -14,29 +14,42 @@ enum Role {
 }
 
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   name     String
-  email    String   @unique
+  email    String    @unique
   password String
   image    String?
-  role     Role     @default(USER)
-  clients  Client[] @relation("ClientsOfTrainer")
+  height   Int?
+  weight   Float?
+  role     Role      @default(USER)
+  goals    Goal[]    @relation("userGoals")
+  workouts Workout[] @relation("userWorkouts")
+  clients  Client[]  @relation("clientsOfTrainer")
 }
 
 model Client {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  phoneNumber String? @unique
-  trainerId   String  @db.ObjectId
-  trainer     User    @relation("ClientsOfTrainer", fields: [trainerId], references: [id])
+  phoneNumber String?   @unique
+  height      Int
+  weight      Float
+  workouts    Workout[] @relation("clientWorkouts")
+  goals       Goal[]
+  trainerId   String    @db.ObjectId
+  trainer     User      @relation("clientsOfTrainer", fields: [trainerId], references: [id])
 }
 
 model Workout {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
   startTime    DateTime
   endTime      DateTime
   muscleGroups MuscleGroup[]
   exercises    Exercise[]
+  user         User?         @relation("userWorkouts", fields: [userId], references: [id])
+  userId       String?       @db.ObjectId
+  clientId     String?       @db.ObjectId
+  client       Client?       @relation("clientWorkouts", fields: [clientId], references: [id])
 }
 
 model Exercise {
@@ -44,6 +57,7 @@ model Exercise {
   nameOfExercise String
   sets           Int
   repetitions    Int[]
+  weights        Float[]
   workout        Workout?      @relation(fields: [workoutId], references: [id])
   workoutId      String?       @db.ObjectId
   muscleGroupIDs String[]      @db.ObjectId
@@ -57,4 +71,13 @@ model MuscleGroup {
   workoutId   String?    @db.ObjectId
   exerciseIDs String[]   @db.ObjectId
   exercises   Exercise[] @relation(fields: [exerciseIDs], references: [id])
+}
+
+model Goal {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  value    String
+  userId   String? @db.ObjectId
+  user     User?   @relation("userGoals", fields: [userId], references: [id])
+  client   Client? @relation(fields: [clientId], references: [id])
+  clientId String? @db.ObjectId
 }
