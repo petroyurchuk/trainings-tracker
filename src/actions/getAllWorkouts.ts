@@ -15,7 +15,16 @@ export const getAllWorkouts = async (): Promise<Workout[]> => {
 };
 
 export const getWorkoutById = async (id: string): Promise<Workout> => {
-  const workouts = await getAllWorkouts();
-  const workout = workouts.filter((workout) => workout.id === id)[0];
-  return workout;
+  try {
+    const workout = await prisma.workout.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!workout) throw new Error("Cannot find this workout");
+
+    return workout;
+  } catch (error: any) {
+    throw new Error(error);
+  }
 };

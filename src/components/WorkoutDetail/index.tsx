@@ -3,7 +3,7 @@
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 import { ExerciseForm } from "@/components";
 import { Exercise, Workout } from "@/types/workout";
 
@@ -38,47 +38,64 @@ const WorkoutDetail: React.FC<WorkoutDetailProps> = ({
   };
 
   return (
-    <div className="relative">
-      <Button variant="outlined" color="info" onClick={() => router.back()}>
-        {"<--"}
-      </Button>
-      <span>Name of workout: </span>
-      <input
-        className="border-2 border-purple-500 w-[600px]"
-        value={nameWorkout}
-        onChange={(e) => {
-          setNameWorkout(e.target.value);
-        }}
-      />{" "}
-      <div className="flex mt-5">
-        <Typography variant="h4" mr={65}>
+    <Box className="p-4 bg-slate-950 min-h-screen">
+      <Stack spacing={2} direction="column">
+        <Button
+          variant="outlined"
+          sx={{ width: { xs: "100%", md: "100px" }, color: "white" }}
+          color="info"
+          onClick={() => router.back()}
+        >
+          Back
+        </Button>
+        <TextField
+          label="Name of Workout"
+          variant="outlined"
+          value={nameWorkout}
+          onChange={(e) => setNameWorkout(e.target.value)}
+          fullWidth
+          className="bg-white text-black"
+        />
+        <Typography variant="h4" className="text-white mt-5">
           Exercises
         </Typography>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleAddExercise}
-        >
-          Add Exercise
-        </Button>
-      </div>
-      <div>
         {exercises.map((exercise) => (
           <ExerciseForm key={exercise.id} exercise={exercise} />
         ))}
-      </div>
-      <Button
-        variant="contained"
-        color="warning"
-        sx={{
-          mt: "15px",
-        }}
-        onClick={handleEndWorkout}
-      >
-        End Workout
-      </Button>
-      <div>{`${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`}</div>
-    </div>
+        <Stack spacing={2} alignItems="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleAddExercise}
+            sx={{
+              width: {
+                xs: "90%",
+                md: "30%",
+              },
+            }}
+          >
+            Add Exercise
+          </Button>
+          <Button
+            variant="contained"
+            color="warning"
+            onClick={handleEndWorkout}
+            sx={{
+              width: {
+                xs: "90%",
+                md: "30%",
+              },
+            }}
+          >
+            End Workout
+          </Button>
+        </Stack>
+        <Typography variant="h6" className="text-white">
+          Duration:{" "}
+          {`${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`}
+        </Typography>
+      </Stack>
+    </Box>
   );
 };
 export default WorkoutDetail;

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "@mui/material";
+import { Box, Button, Grid, Paper, TextField } from "@mui/material";
 import { Exercise } from "@/types/workout";
 import axios from "axios";
 
@@ -19,7 +19,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ exercise }) => {
   );
   const [exerciseSets, setExerciseSets] = React.useState(exercise.sets);
   const [currentSet, setCurrentSet] = React.useState<number>(0);
-  const arr = Array.from({ length: exercise.sets }, (v, index) => ({
+  const arr = Array.from({ length: exercise.sets }, (_v, index) => ({
     repetitions: exercise.repetitions[index] || 0,
     weight: exercise.weights[index] || 0,
   }));
@@ -61,82 +61,110 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ exercise }) => {
       console.log(error);
     }
   };
+
   return (
-    <div className="flex flex-col gap-5">
-      <div>
-        <input
-          type="text"
-          placeholder="Exercise name..."
-          className="outline-none border-[1px] border-gray-400 transition-all duration-150 focus:border-purple-600 mr-10"
-          value={exerciseName}
-          onChange={(e) => setExerciseName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Quantity of sets... "
-          className="outline-none border-[1px] border-gray-400 transition-all duration-150 focus:border-purple-600"
-          value={exerciseSets}
-          onChange={(e) => handleSetChange(Number(e.target.value))}
-        />
-      </div>
-      <div className="space-x-5">
-        {[...new Array(exerciseSets)].map((_set, idx) => (
-          <div
-            className={`size-[50px] border-[1px] border-gray-950 inline-flex justify-center items-center cursor-pointer ${idx === currentSet ? "bg-slate-900 text-white font-semibold" : ""}`}
-            key={idx}
-            onClick={() => setCurrentSet(idx)}
-          >
-            {idx + 1}
-          </div>
-        ))}
-      </div>
-      {exerciseSets ? (
-        <div className="space-x-10">
-          <input
-            type="number"
-            placeholder="Enter repetitions"
-            className="outline-none border-[1px] border-gray-400 transition-all duration-150 focus:border-purple-600"
-            value={currentSetInfo[currentSet]?.repetitions}
-            onChange={(e) => {
-              setCurrentSetInfo((prevState) => {
-                const newState = [...prevState];
-                newState[currentSet] = {
-                  ...newState[currentSet],
-                  repetitions: Number(e.target.value),
-                };
-                return newState;
-              });
-            }}
-          />
-          <input
-            type="number"
-            placeholder="Enter weight in kilograms"
-            className="outline-none border-[1px] border-gray-400 transition-all duration-150 focus:border-purple-600"
-            value={currentSetInfo[currentSet]?.weight}
-            onChange={(e) => {
-              setCurrentSetInfo((prevState) => {
-                const newState = [...prevState];
-                newState[currentSet] = {
-                  ...newState[currentSet],
-                  weight: Number(e.target.value),
-                };
-                return newState;
-              });
-            }}
-          />
-        </div>
-      ) : null}
-      <Button
-        variant="outlined"
-        color="success"
-        sx={{
-          maxWidth: "400px",
-        }}
-        onClick={handleUpdate}
-      >
-        Save
-      </Button>
-    </div>
+    <Box className="p-4 bg-gray-100 min-h-[400px]">
+      <Paper elevation={3} className="p-20">
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Exercise name"
+              variant="outlined"
+              value={exerciseName}
+              onChange={(e) => setExerciseName(e.target.value)}
+              className="bg-white"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              type="number"
+              label="Quantity of sets"
+              variant="outlined"
+              value={exerciseSets}
+              onChange={(e) => handleSetChange(Number(e.target.value))}
+              className="bg-white"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Box className="flex gap-2 flex-wrap">
+              {[...Array(exerciseSets)].map((_, idx) => (
+                <Button
+                  key={idx}
+                  variant={idx === currentSet ? "contained" : "outlined"}
+                  color={idx === currentSet ? "primary" : "inherit"}
+                  onClick={() => setCurrentSet(idx)}
+                  className="w-12"
+                >
+                  {idx + 1}
+                </Button>
+              ))}
+            </Box>
+          </Grid>
+          {exerciseSets > 0 && (
+            <Grid container mt={2} spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  type="number"
+                  label="Enter repetitions"
+                  variant="outlined"
+                  value={currentSetInfo[currentSet]?.repetitions}
+                  onChange={(e) => {
+                    setCurrentSetInfo((prevState) => {
+                      const newState = [...prevState];
+                      newState[currentSet] = {
+                        ...newState[currentSet],
+                        repetitions: Number(e.target.value),
+                      };
+                      return newState;
+                    });
+                  }}
+                  className="bg-white"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  type="number"
+                  label="Enter weight in kilograms"
+                  variant="outlined"
+                  value={currentSetInfo[currentSet]?.weight}
+                  onChange={(e) => {
+                    setCurrentSetInfo((prevState) => {
+                      const newState = [...prevState];
+                      newState[currentSet] = {
+                        ...newState[currentSet],
+                        weight: Number(e.target.value),
+                      };
+                      return newState;
+                    });
+                  }}
+                  className="bg-white"
+                />
+              </Grid>
+            </Grid>
+          )}
+          <Grid container className="mt-4" justifyContent="center">
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleUpdate}
+              sx={{
+                paddingY: "8px",
+                width: {
+                  xs: "100%",
+                  md: "50%",
+                },
+              }}
+            >
+              Save
+            </Button>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Box>
   );
 };
 export default ExerciseForm;

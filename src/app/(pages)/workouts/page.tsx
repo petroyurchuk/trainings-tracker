@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { Stack, Typography } from "@mui/material";
-import { getAllWorkouts, getWorkoutById } from "@/actions/getAllWorkouts";
+import { getAllWorkouts } from "@/actions/getAllWorkouts";
 import getCurrentUser from "@/actions/getCurrentUser";
 import { CreateWorkout, Workouts } from "@/components";
 
 const WorkoutsPage = async () => {
-  const workouts = await getAllWorkouts();
-  const lastWorkout = await getWorkoutById(workouts[workouts.length - 1]?.id);
   const currentUser = await getCurrentUser();
-  const idLastWorkout = lastWorkout?.id;
+  const workouts = await getAllWorkouts();
+
   return (
     <Stack>
       <Link
@@ -25,8 +24,8 @@ const WorkoutsPage = async () => {
           <div>Some shit</div>
         )}
       </Stack>
-      <Workouts workouts={workouts} />
-      <CreateWorkout idLastWorkout={idLastWorkout} />
+      <Workouts workouts={workouts} startUrl="workouts" />
+      <CreateWorkout urlApi="workout" urlClient="workouts" />
     </Stack>
   );
 };

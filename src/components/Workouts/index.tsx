@@ -1,20 +1,26 @@
-import { Workout } from "@/types/workout";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { Workout } from "@/types/workout";
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
 type WorkoutsProps = {
+  startUrl: string;
   workouts: Workout[];
 };
-const Workouts: React.FC<WorkoutsProps> = ({ workouts }) => {
+const Workouts: React.FC<WorkoutsProps> = ({ workouts, startUrl }) => {
   return (
-    <div>
+    <div className="flex flex-wrap justify-start items-center m-4 gap-10">
       {workouts.map((workout, idx) => (
-        <Link
-          href={`/workouts/${workout.id}`}
-          className="p-2 border-2 border-slate-600 my-2 ml-10 w-[300px] block"
-          key={workout.id}
-        >
-          <span>{idx + 1}.</span> {workout.name}
+        <Link href={`/${startUrl}/${workout.id}`} key={workout.id} passHref>
+          <Card className="m-2 cursor-pointer max-w-sm w-full" elevation={3}>
+            <CardActionArea>
+              <CardContent className="p-4">
+                <Typography variant="h5" component="div">
+                  {idx + 1}. {workout.name}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
         </Link>
       ))}
     </div>

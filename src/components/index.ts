@@ -18,3 +18,5 @@ export { default as CreateWorkout } from "./CreateWorkout";
 export { default as Workouts } from "./Workouts";
 export { default as WorkoutDetail } from "./WorkoutDetail";
 export { default as ExerciseForm } from "./ExerciseForm";
+export { default as Clients } from "./Clients";
+export { default as ClientForm } from "./ClientForm";
